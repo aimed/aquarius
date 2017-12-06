@@ -10,6 +10,7 @@ import 'brace/theme/github';
 import 'brace/ext/language_tools';
 
 import * as React from 'react';
+import * as electron from 'electron';
 import * as path from 'path';
 
 import AceEditor, { Annotation } from 'react-ace';
@@ -22,6 +23,7 @@ import { Theme } from 'mermaid';
 
 export interface AppState {
   mermaid?: string;
+  mermaidUnchanged?: string;
   mermaidFilePath?: string | null;
   errors?: Annotation[];
   theme?: Theme;
@@ -30,6 +32,7 @@ export interface AppState {
 export class App extends React.Component<{}, AppState> {
   state: AppState = {
     mermaid: '',
+    mermaidUnchanged: '',
     mermaidFilePath: window.localStorage['lastMermaidFilePath'] || null,
     theme: window.localStorage['theme'] || 'default'
   };
@@ -38,8 +41,7 @@ export class App extends React.Component<{}, AppState> {
 
   async componentWillMount() {
     if (this.state.mermaidFilePath) {
-      const content = await Files.readFile(this.state.mermaidFilePath);
-      this.setState({ mermaid: content });
+      this.onOpen(this.state.mermaidFilePath);
     }
   }
 
@@ -80,10 +82,16 @@ export class App extends React.Component<{}, AppState> {
     if (nextState.theme !== this.state.theme) {
       window.localStorage.setItem('theme', this.state.theme as string);
     }
+
+    const hasChanged = nextState.mermaid !== nextState.mermaidUnchanged;
+    const title = 'Aquarius ' + (nextState.mermaidFilePath ? ' - ' + nextState.mermaidFilePath : '') + (hasChanged ? ' *' : '');
+    electron.remote.getCurrentWindow().setTitle(title);
   }
 
-  onOpen = async () => {
-    const fileName = await Files.selectReadFile();
+  onOpen = async (fileName?: string | null) => {
+    if (!fileName) {
+      fileName = await Files.selectReadFile();
+    }
 
     if (!fileName) {
       return;
@@ -93,7 +101,8 @@ export class App extends React.Component<{}, AppState> {
 
     this.setState({
       mermaidFilePath: fileName,
-      mermaid
+      mermaid,
+      mermaidUnchanged: mermaid
     });
   }
 
@@ -108,11 +117,14 @@ export class App extends React.Component<{}, AppState> {
     if (saveFilePath) {
       await Files.writeFile(saveFilePath, mermaid + '');
     }
+
+    this.setState({ mermaidUnchanged: this.state.mermaid });
   }
 
   onNew = () => {
     this.setState({
       mermaid: '',
+      mermaidUnchanged: '',
       mermaidFilePath: null
     });
   }
@@ -160,7 +172,7 @@ export class App extends React.Component<{}, AppState> {
       <div style={containerStyle} className='aquarius'>
         <div style={{ padding: '0.5em', borderBottom: '1px solid #f6f6f6', gridArea: 'nav' }} className='aquarius__nav'>
           <Button onClick={this.onNew}>New</Button>
-          <Button onClick={this.onOpen}>Open</Button>
+          <Button onClick={() => this.onOpen()}>Open</Button>
           <Button onClick={this.onSave}>Save</Button>
           <Button onClick={() => this.onExport()} disabled={!this.isExistingFile || !this.mermaidRef}>Export</Button>
           <select onChange={e => this.setTheme(e.currentTarget.value as Theme)} value={this.state.theme}>
