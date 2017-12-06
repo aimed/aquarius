@@ -8,12 +8,6 @@ import { Theme } from 'mermaid';
 mermaid.initialize({
     startOnLoad: false
 });
-/*
-  dark: darkTheme,
-  default: defaultTheme,
-  forest: forestTheme,
-  neutral: neutralTheme
-*/
 
 export interface MermaidState {
     diagram?: string;

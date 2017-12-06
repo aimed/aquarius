@@ -10,7 +10,6 @@ import 'brace/theme/github';
 import 'brace/ext/language_tools';
 
 import * as React from 'react';
-import * as electron from 'electron';
 
 import AceEditor, { Annotation } from 'react-ace';
 
@@ -70,10 +69,12 @@ export class App extends React.Component<{}, AppState> {
     if (nextState.theme !== this.state.theme) {
       window.localStorage.setItem('theme', nextState.theme as string);
     }
+  }
 
-    const hasChanged = nextState.mermaid !== nextState.mermaidUnchanged;
-    const title = 'Aquarius ' + (nextState.mermaidFilePath ? ' - ' + nextState.mermaidFilePath : '') + (hasChanged ? ' *' : '');
-    electron.remote.getCurrentWindow().setTitle(title);
+  getTitle(state: AppState = this.state): string {
+    const hasChanged = state.mermaid !== state.mermaidUnchanged;
+    const title = (state.mermaidFilePath || '') + (hasChanged ? ' (unsaved)' : '');
+    return title;
   }
 
   onOpen = async (fileName?: string | null) => {
@@ -156,9 +157,23 @@ export class App extends React.Component<{}, AppState> {
       `,
     };
 
+    const navStyle: React.CSSProperties = {
+      padding: '0.5em',
+      borderBottom: '1px solid #f6f6f6',
+      gridArea: 'nav',
+      display: 'flex',
+      alignItems: 'center'
+    };
+
+    const titleStyle: React.CSSProperties = {
+      fontSize: '0.7em',
+      color: '#999999',
+      marginLeft: '1em'
+    };
+
     return (
       <div style={containerStyle} className='aquarius'>
-        <div style={{ padding: '0.5em', borderBottom: '1px solid #f6f6f6', gridArea: 'nav' }} className='aquarius__nav'>
+        <div style={navStyle} className='aquarius__nav'>
           <Button onClick={this.onNew}>New</Button>
           <Button onClick={() => this.onOpen()}>Open</Button>
           <Button onClick={this.onSave}>Save</Button>
@@ -168,6 +183,7 @@ export class App extends React.Component<{}, AppState> {
               <option key={theme} value={theme}>{theme}</option>
             )}
           </select>
+          <span style={titleStyle}>{this.getTitle()}</span>
         </div>
 
         <AceEditor
