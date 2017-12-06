@@ -10,16 +10,19 @@ import 'brace/theme/github';
 import 'brace/ext/language_tools';
 
 import * as React from 'react';
+import * as path from 'path';
 
-import AceEditor from 'react-ace';
+import AceEditor, { Annotation } from 'react-ace';
+
 import { Button } from './Button/Button';
 import { Files } from './Files';
 import { Mermaid } from './Mermaid/Mermaid';
 import { PdfExporter } from './PdfExporter';
 
 export interface AppState {
-  mermaid: string;
+  mermaid?: string;
   mermaidFilePath?: string | null;
+  errors?: Annotation[];
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -35,6 +38,29 @@ export class App extends React.Component<{}, AppState> {
       const content = await Files.readFile(this.state.mermaidFilePath);
       this.setState({ mermaid: content });
     }
+  }
+
+  get isExistingFile(): boolean {
+    return !!this.state.mermaidFilePath;
+  }
+
+  get currentFileName(): string | null {
+    const { mermaidFilePath } = this.state;
+
+    if (mermaidFilePath) {
+      const p = path.parse(mermaidFilePath);
+      return p.name + p.ext;
+    }
+
+    return null;
+  }
+
+  onMermaidError = (line: number, message: string) => {
+    this.setState({ errors: [{ row: line - 1, column: 0, type: 'error', text: message }] });
+  }
+
+  onMermaidSuccess = () => {
+    this.setState({ errors: undefined });
   }
 
   componentDidUpdate() {
@@ -60,8 +86,14 @@ export class App extends React.Component<{}, AppState> {
 
   onSave = async () => {
     const { mermaidFilePath, mermaid } = this.state;
-    if (mermaidFilePath && mermaid) {
-      await Files.writeFile(mermaidFilePath, mermaid);
+    let saveFilePath: string | null | undefined = mermaidFilePath;
+
+    if (!saveFilePath) {
+      saveFilePath = await Files.selectReadFile();
+    }
+
+    if (saveFilePath) {
+      await Files.writeFile(saveFilePath, mermaid + '');
     }
   }
 
@@ -87,7 +119,6 @@ export class App extends React.Component<{}, AppState> {
 
   onExport = (path: string | null | undefined = this.state.mermaidFilePath) => {
     if (!this.mermaidRef || !path) {
-      console.log('No path or no ref?');
       return;
     }
 
@@ -113,13 +144,13 @@ export class App extends React.Component<{}, AppState> {
     };
 
     return (
-      <div style={containerStyle}>
-        <div style={{ padding: '0.5em', borderBottom: '1px solid #f6f6f6', gridArea: 'nav' }}>
+      <div style={containerStyle} className='aquarius'>
+        <div style={{ padding: '0.5em', borderBottom: '1px solid #f6f6f6', gridArea: 'nav' }} className='aquarius__nav'>
           <Button onClick={this.onNew}>New</Button>
           <Button onClick={this.onOpen}>Open</Button>
-          <Button onClick={this.onSave} disabled={!this.state.mermaidFilePath}>Save</Button>
-          <Button onClick={() => this.onExport()} disabled={!this.state.mermaidFilePath}>Export</Button>
-          {this.state.mermaidFilePath && <span>{this.state.mermaidFilePath}</span>}
+          <Button onClick={this.onSave}>Save</Button>
+          <Button onClick={() => this.onExport()} disabled={!this.isExistingFile || !this.mermaidRef}>Export</Button>
+          {this.state.mermaidFilePath && <span>{this.currentFileName}</span>}
         </div>
 
         <AceEditor
@@ -132,8 +163,16 @@ export class App extends React.Component<{}, AppState> {
           style={{ gridArea: 'ace' }}
           width='50vw'
           height='100%'
+          annotations={this.state.errors}
         />
-        <Mermaid style={{ gridArea: 'mermaid' }} onSetRef={this.onSetRef}>{this.state.mermaid}</Mermaid>
+        <Mermaid
+          style={{ gridArea: 'mermaid' }}
+          onSetRef={this.onSetRef}
+          onError={this.onMermaidError}
+          onSuccess={this.onMermaidSuccess}
+        >
+          {this.state.mermaid + ''}
+        </Mermaid>
       </div>
     );
   }

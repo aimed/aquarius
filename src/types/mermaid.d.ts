@@ -1,18 +1,17 @@
 declare module 'mermaid' {
     type InitializeConfig = {
-        startOnLoad: boolean;
+        startOnLoad?: boolean;
+        theme?: 'dark'|'default'|'forest'|'neutral';
     };
     
     type DiagramLoadHandler = (html: string) => void;
-    type MermaidAPI = {
-        initialize: (config: InitializeConfig) => void;
-        render: (name: string | null | undefined, data: string, handler: DiagramLoadHandler, html?: HTMLElement | null) => void;
-        parse: (text: string) => any;
-    }
+    let initialize: (config: InitializeConfig) => void;
+    let render: (name: string | null | undefined, data: string, handler: DiagramLoadHandler, html?: HTMLElement | null) => void;
+    let parse: (text: string) => boolean;
 
-    let mermaidAPI: MermaidAPI;
-    
     export {
-        mermaidAPI
+        initialize,
+        render,
+        parse
     };
 }
