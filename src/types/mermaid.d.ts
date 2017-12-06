@@ -1,7 +1,9 @@
 declare module 'mermaid' {
+    export type Theme = 'dark'|'default'|'forest'|'neutral';
+    
     type InitializeConfig = {
         startOnLoad?: boolean;
-        theme?: 'dark'|'default'|'forest'|'neutral';
+        theme?: Theme;
     };
     
     type DiagramLoadHandler = (html: string) => void;
