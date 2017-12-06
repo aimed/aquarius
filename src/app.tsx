@@ -74,13 +74,13 @@ export class App extends React.Component<{}, AppState> {
 
   componentWillUpdate(_nextProps: {}, nextState: AppState) {
     if (nextState.mermaidFilePath !== this.state.mermaidFilePath) {
-      this.state.mermaidFilePath
-      ? window.localStorage.setItem('lastMermaidFilePath', this.state.mermaidFilePath)
+      nextState.mermaidFilePath
+      ? window.localStorage.setItem('lastMermaidFilePath', nextState.mermaidFilePath)
       : window.localStorage.removeItem('lastMermaidFilePath');
     }
 
     if (nextState.theme !== this.state.theme) {
-      window.localStorage.setItem('theme', this.state.theme as string);
+      window.localStorage.setItem('theme', nextState.theme as string);
     }
 
     const hasChanged = nextState.mermaid !== nextState.mermaidUnchanged;
