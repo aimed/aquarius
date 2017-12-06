@@ -11,7 +11,6 @@ import 'brace/ext/language_tools';
 
 import * as React from 'react';
 import * as electron from 'electron';
-import * as path from 'path';
 
 import AceEditor, { Annotation } from 'react-ace';
 
@@ -47,17 +46,6 @@ export class App extends React.Component<{}, AppState> {
 
   get isExistingFile(): boolean {
     return !!this.state.mermaidFilePath;
-  }
-
-  get currentFileName(): string | null {
-    const { mermaidFilePath } = this.state;
-
-    if (mermaidFilePath) {
-      const p = path.parse(mermaidFilePath);
-      return p.name + p.ext;
-    }
-
-    return null;
   }
 
   onMermaidError = (row: number, column: number, message: string) => {
@@ -180,7 +168,6 @@ export class App extends React.Component<{}, AppState> {
               <option key={theme} value={theme}>{theme}</option>
             )}
           </select>
-          {this.state.mermaidFilePath && <span>{this.currentFileName}</span>}
         </div>
 
         <AceEditor
@@ -194,6 +181,7 @@ export class App extends React.Component<{}, AppState> {
           width='50vw'
           height='100%'
           annotations={this.state.errors}
+          debounceChangePeriod={300}
         />
         <Mermaid
           style={{ gridArea: 'mermaid' }}
