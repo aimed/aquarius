@@ -8,7 +8,10 @@ declare module 'react-ace' {
         value?: string;
         enableLiveAutocompletion?: boolean;
         enableBasicAutocompletion?: boolean;
-        
+        className?: string;
+        style?: React.CSSProperties;
+        width?: string;
+        height?: string;
     }
     export default class AceEditor extends React.Component<AceEditorProps, {}> {}
 }

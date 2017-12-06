@@ -1,70 +1,75 @@
+/**
+ * At this point we import ace supporting files.
+ * We use the markdown mode and the github theme.
+ * The language tools are needed for autocomplete.
+ * We need to import this before we import ace itself.
+ */
 import 'brace';
-import 'brace/mode/java';
+import 'brace/mode/markdown';
 import 'brace/theme/github';
 import 'brace/ext/language_tools';
 
 import * as React from 'react';
-import * as electron from 'electron';
-import * as fs from 'fs';
-import * as path from 'path';
 
 import AceEditor from 'react-ace';
 import { Button } from './Button/Button';
+import { Files } from './Files';
 import { Mermaid } from './Mermaid/Mermaid';
-import { SplitView } from './SplitView/SplitView';
+import { PdfExporter } from './PdfExporter';
 
 export interface AppState {
-  mermaidRaw: string;
-  rawFilePath?: string | null;
-  exportFilePath?: string | null;
+  mermaid: string;
+  mermaidFilePath?: string | null;
 }
 
 export class App extends React.Component<{}, AppState> {
   state: AppState = {
-    mermaidRaw: window.localStorage['lastMermaid'] || '',
+    mermaid: '',
+    mermaidFilePath: window.localStorage['lastMermaidFilePath'] || null
   };
 
   mermaidRef: SVGElement | null = null;
 
-  get exportPath(): string | null {
-    return window.localStorage['exportPath'];
-  }
-
-  set exportPath(value: string | null) {
-    window.localStorage['exportPath'] = value;
-  }
-
-  open = () => {
-    electron.remote.dialog.showOpenDialog(
-      electron.remote.getCurrentWindow(),
-      {},
-      fileName => {
-        if (fileName && fileName.length) {
-          fs.readFile(fileName[0], null, (err, data) => {
-            if (err) {
-              alert(err);
-            } else {
-              this.setState({
-                rawFilePath: fileName[0],
-                exportFilePath: null,
-                mermaidRaw: data.toString(),
-              });
-            }
-          });
-        }
-      }
-    );
-  }
-
-  save = () => {
-    const { rawFilePath, mermaidRaw } = this.state;
-    if (rawFilePath && mermaidRaw) {
-      fs.writeFile(rawFilePath, mermaidRaw, (err) => {
-        if (err) {
-          alert(err);
-        }
-      });
+  async componentWillMount() {
+    if (this.state.mermaidFilePath) {
+      const content = await Files.readFile(this.state.mermaidFilePath);
+      this.setState({ mermaid: content });
     }
+  }
+
+  componentDidUpdate() {
+    this.state.mermaidFilePath
+    ? window.localStorage.setItem('lastMermaidFilePath', this.state.mermaidFilePath)
+    : window.localStorage.removeItem('lastMermaidFilePath');
+  }
+
+  onOpen = async () => {
+    const fileName = await Files.selectReadFile();
+
+    if (!fileName) {
+      return;
+    }
+
+    const mermaid = await Files.readFile(fileName);
+
+    this.setState({
+      mermaidFilePath: fileName,
+      mermaid
+    });
+  }
+
+  onSave = async () => {
+    const { mermaidFilePath, mermaid } = this.state;
+    if (mermaidFilePath && mermaid) {
+      await Files.writeFile(mermaidFilePath, mermaid);
+    }
+  }
+
+  onNew = () => {
+    this.setState({
+      mermaid: '',
+      mermaidFilePath: null
+    });
   }
 
   onSetRef = (ref: HTMLDivElement | null) => {
@@ -80,119 +85,55 @@ export class App extends React.Component<{}, AppState> {
     }
   }
 
-  get printableHtml(): string {
-    return this.mermaidRef ? `
-      <html>
-        <style>
-        html,
-        body {
-          margin: 0;
-          padding: 0;
-        }
-
-        svg {
-          width: 100vw;
-          height: 100vh;
-        }
-
-        * {
-          page-break-after: avoid;
-        }
-        </style>
-        <body>${this.mermaidRef.outerHTML}</body>
-      </html>
-    ` : ``;
-  }
-
-  onExportAs = () => {
-    electron.remote.dialog.showSaveDialog(
-      electron.remote.getCurrentWindow(),
-      { defaultPath:
-          this.state.exportFilePath && path.dirname(this.state.exportFilePath)
-          || this.exportPath
-          || path.join(__dirname, '..', 'mermaid.pdf') },
-      fileName => {
-        if (fileName) {
-          this.exportPath = fileName.endsWith('.pdf') ? fileName : fileName + '.pdf';
-          this.onExport();
-        }
-      }
-    );
-  }
-
-  onExport = () => {
-    if (!this.mermaidRef) {
+  onExport = (path: string | null | undefined = this.state.mermaidFilePath) => {
+    if (!this.mermaidRef || !path) {
+      console.log('No path or no ref?');
       return;
     }
 
-    if (!this.exportPath) {
-      this.onExportAs();
-      return;
-    }
-
-    const targetFile = this.exportPath;
-
-    // Use the group size to properly calucalte the size of the svg.
-    const groups = this.mermaidRef.getElementsByTagName('g');
-
-    if (!groups || !groups.length) {
-      return;
-    }
-
-    const size = groups[0].getBoundingClientRect();
-    const pageSize = { height: 72 * (size.height), width: 72 * (size.width) } as any;
-    const html = this.printableHtml;
-    const win = new electron.remote.BrowserWindow({ width: size.width, height: size.height, show: false });
-
-    win.loadURL('data:text/html;charset=utf-8,' + encodeURI(html));
-    win.webContents.on('did-finish-load', () => {
-      win.webContents.printToPDF({ marginsType: 1, pageSize }, (err, data) => {
-        if (err) {
-          alert(err);
-        } else if (data) {
-          fs.writeFile(targetFile, data, (err2) => {
-            if (err2) {
-              alert(err2);
-            }
-          });
-        }
-      });
-    });
+    const targetFile = PdfExporter.pdfNameForFile(path);
+    PdfExporter.exportSvg(this.mermaidRef, targetFile);
   }
 
   onUpdateGraph = (value: string) => {
-    this.setState({ mermaidRaw: value });
-    window.localStorage['lastMermaid'] = value;
+    this.setState({ mermaid: value });
   }
 
   render() {
+    const containerStyle: React.CSSProperties = {
+      minHeight: '100vh',
+      minWidth: '100vw',
+      display: 'grid',
+      gridTemplateColumns: 'auto',
+      gridTemplateRows: 'auto 1fr',
+      gridTemplateAreas: `
+        "nav nav"
+        "ace mermaid"
+      `,
+    };
+
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '0.5em', borderBottom: '1px solid #f6f6f6' }}>
-          <Button onClick={this.open}>Open</Button>
-          <Button onClick={this.save} disabled={!this.state.rawFilePath}>Save</Button>
-          <Button onClick={this.onExport}>Export</Button>
-          <Button onClick={this.onExportAs}>Export as</Button>
+      <div style={containerStyle}>
+        <div style={{ padding: '0.5em', borderBottom: '1px solid #f6f6f6', gridArea: 'nav' }}>
+          <Button onClick={this.onNew}>New</Button>
+          <Button onClick={this.onOpen}>Open</Button>
+          <Button onClick={this.onSave} disabled={!this.state.mermaidFilePath}>Save</Button>
+          <Button onClick={() => this.onExport()} disabled={!this.state.mermaidFilePath}>Export</Button>
+          {this.state.mermaidFilePath && <span>{this.state.mermaidFilePath}</span>}
         </div>
 
-        <SplitView
-          containerStyle={{ flex: 1 }}
-          left={
-            // <MermaidInput style={{ flex: 1 }} value={this.state.mermaidRaw} onChange={this.onUpdateGraph} />
-            <AceEditor
-              mode='java'
-              theme='github'
-              onChange={this.onUpdateGraph}
-              name='UNIQUE_ID_OF_DIV'
-              editorProps={{$blockScrolling: true}}
-              value={this.state.mermaidRaw}
-              enableLiveAutocompletion={true}
-            />
-          }
-          right={
-            <Mermaid style={{ flex: 1 }} onSetRef={this.onSetRef}>{this.state.mermaidRaw}</Mermaid>
-          }
+        <AceEditor
+          mode='markdown'
+          theme='github'
+          onChange={this.onUpdateGraph}
+          value={this.state.mermaid}
+          editorProps={{ $blockScrolling: Infinity }}
+          enableLiveAutocompletion={true}
+          style={{ gridArea: 'ace' }}
+          width='50vw'
+          height='100%'
         />
+        <Mermaid style={{ gridArea: 'mermaid' }} onSetRef={this.onSetRef}>{this.state.mermaid}</Mermaid>
       </div>
     );
   }
