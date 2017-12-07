@@ -16,7 +16,14 @@ export class SubmitButton<T> extends React.Component<SubmitButtonProps<T>, Submi
         submitting: false
     };
 
+    timeOut: NodeJS.Timer | null = null;
+
+    componentWillUnmount() {
+        this.clearTimeout();
+    }
+
     handleClick = () => {
+        this.clearTimeout();
         const { onClick, onSuccess = () => {/**/}, onFailure = () => {/**/} } = this.props;
 
         if (!onClick) {
@@ -26,17 +33,24 @@ export class SubmitButton<T> extends React.Component<SubmitButtonProps<T>, Submi
         const clickData = onClick();
 
         if (clickData) {
-            this.setState({ submitting: true });
+            this.setState({ submitting: true, submitSuccess: undefined });
             clickData.then(r => {
                 this.setState({ submitting: false, submitSuccess: true });
-                setTimeout(() => {
+                this.timeOut = setTimeout(() => {
                     this.setState({ submitSuccess: undefined });
+                    this.timeOut = null;
                 }, 500);
                 onSuccess(r as any);
             }).catch(e => {
                 this.setState({ submitting: false });
                 onFailure(e);
             });
+        }
+    }
+
+    private clearTimeout() {
+        if (this.timeOut) {
+            clearTimeout(this.timeOut);
         }
     }
 
