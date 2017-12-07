@@ -39,14 +39,15 @@ export class App extends React.Component<{}, AppState> {
 
   mermaidRef: SVGElement | null = null;
 
-  handleClose = async(event: electron.Event) => {
-    if (this.fileChanged && !await areYouSure()) {
+  handleClose = (event: electron.Event) => {
+    if (this.fileChanged && !areYouSure()) {
       event.preventDefault();
     }
   }
 
   componentWillMount() {
-    electron.remote.getCurrentWindow().on('close', this.handleClose);
+    electron.remote.getCurrentWindow().addListener('close', this.handleClose);
+    // electron.remote.app.addListener('before-quit', this.handleClose);
 
     if (this.state.mermaidFilePath) {
       this.onOpen(this.state.mermaidFilePath);
@@ -55,6 +56,7 @@ export class App extends React.Component<{}, AppState> {
 
   componentWillUnmount() {
     electron.remote.getCurrentWindow().removeListener('close', this.handleClose);
+    // electron.remote.app.removeListener('before-quit', this.handleClose);
   }
 
   get isExistingFile(): boolean {
@@ -96,7 +98,7 @@ export class App extends React.Component<{}, AppState> {
   }
 
   onOpen = async (fileName?: string | null) => {
-    if (this.fileChanged && !await areYouSure()) {
+    if (this.fileChanged && !areYouSure()) {
       return;
     }
 
@@ -133,7 +135,7 @@ export class App extends React.Component<{}, AppState> {
   }
 
   onNew = async () => {
-    if (this.fileChanged && !await areYouSure()) {
+    if (this.fileChanged && !areYouSure()) {
       return;
     }
 
