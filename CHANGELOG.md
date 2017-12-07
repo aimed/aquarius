@@ -1,3 +1,18 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/aimed/aquarius/compare/v1.0.0...v1.1.0) (2017-12-07)
+
+
+### Bug Fixes
+
+* fixes ts error "duplicate definition" ([067b469](https://github.com/aimed/aquarius/commit/067b469))
+
+
+### Features
+
+* **ci:** adds auto updater ([1dc73ec](https://github.com/aimed/aquarius/commit/1dc73ec))
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2017-12-07)
 
