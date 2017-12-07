@@ -124,7 +124,7 @@ export class App extends React.Component<{}, AppState> {
     let saveFilePath: string | null | undefined = mermaidFilePath;
 
     if (!saveFilePath) {
-      saveFilePath = await Files.selectReadFile();
+      saveFilePath = await Files.selectWriteFile();
     }
 
     if (saveFilePath) {
@@ -202,6 +202,7 @@ export class App extends React.Component<{}, AppState> {
     return (
       <div style={containerStyle} className='aquarius'>
         <div style={navStyle} className='aquarius__nav'>
+          <img src='./aquarius.svg' alt='Aquarius' height={20} />
           <Button onClick={this.onNew}>New</Button>
           <Button onClick={() => this.onOpen()}>Open</Button>
           <Button onClick={this.onSave}>Save</Button>
