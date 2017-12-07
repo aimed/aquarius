@@ -15,12 +15,13 @@ import * as electron from 'electron';
 import AceEditor, { Annotation } from 'react-ace';
 
 import { Button } from './Button/Button';
-import { Files } from './Files';
+import { Dialogs } from './Dialogs';
 import { Mermaid } from './Mermaid/Mermaid';
 import { PdfExporter } from './PdfExporter';
 import { SubmitButton } from './Button/SubmitButtons';
 import { Theme } from 'mermaid';
 import { areYouSure } from './utils/areYouSure';
+import { fs } from 'mz';
 
 const Store = require('electron-store'); // tslint:disable-line
 const store = new Store();
@@ -105,14 +106,14 @@ export class App extends React.Component<{}, AppState> {
     }
 
     if (!fileName) {
-      fileName = await Files.selectReadFile();
+      fileName = await Dialogs.openFile();
     }
 
     if (!fileName) {
       return;
     }
 
-    const mermaid = await Files.readFile(fileName);
+    const mermaid = (await fs.readFile(fileName)).toString();
 
     this.setState({
       mermaidFilePath: fileName,
@@ -126,11 +127,11 @@ export class App extends React.Component<{}, AppState> {
     let saveFilePath: string | null | undefined = mermaidFilePath;
 
     if (!saveFilePath) {
-      saveFilePath = await Files.selectWriteFile();
+      saveFilePath = await Dialogs.saveFile();
     }
 
     if (saveFilePath) {
-      await Files.writeFile(saveFilePath, mermaid + '');
+      await fs.writeFile(saveFilePath, mermaid + '');
     }
 
     this.setState({ mermaidUnchanged: this.state.mermaid });
