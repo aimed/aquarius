@@ -18,6 +18,7 @@ import { Button } from './Button/Button';
 import { Files } from './Files';
 import { Mermaid } from './Mermaid/Mermaid';
 import { PdfExporter } from './PdfExporter';
+import { SubmitButton } from './Button/SubmitButtons';
 import { Theme } from 'mermaid';
 import { areYouSure } from './utils/areYouSure';
 
@@ -165,7 +166,7 @@ export class App extends React.Component<{}, AppState> {
     }
 
     const targetFile = PdfExporter.pdfNameForFile(path);
-    PdfExporter.exportSvg(this.mermaidRef, targetFile);
+    return PdfExporter.exportSvg(this.mermaidRef, targetFile);
   }
 
   onUpdateGraph = (value: string) => {
@@ -202,11 +203,11 @@ export class App extends React.Component<{}, AppState> {
     return (
       <div style={containerStyle} className='aquarius'>
         <div style={navStyle} className='aquarius__nav'>
-          <img src='./aquarius.svg' alt='Aquarius' height={20} />
+          <img src='./aquarius_small.svg' alt='Aquarius' height={21} />
           <Button onClick={this.onNew}>New</Button>
           <Button onClick={() => this.onOpen()}>Open</Button>
-          <Button onClick={this.onSave}>Save</Button>
-          <Button onClick={() => this.onExport()} disabled={!this.isExistingFile || !this.mermaidRef}>Export</Button>
+          <SubmitButton onClick={() => this.onSave()}>Save</SubmitButton>
+          <SubmitButton onClick={() => this.onExport()} disabled={!this.isExistingFile || !this.mermaidRef}>Export</SubmitButton>
           <select onChange={e => this.setTheme(e.currentTarget.value as Theme)} value={this.state.theme}>
             {(['default', 'dark', 'neutral', 'forest'] as Theme[]).map(theme =>
               <option key={theme} value={theme}>{theme}</option>

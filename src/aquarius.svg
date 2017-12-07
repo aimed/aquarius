@@ -8,14 +8,14 @@
 <g id="aquarius" clip-path="url(#clip-0)">
 <g id="Aquarius">
 <g id="Aquarius" filter="url(#filter0_i)">
-<use xlink:href="#path0_fill" transform="translate(73 -203)" fill="#C4C4C4"/>
-<use xlink:href="#path0_fill" transform="translate(73 -203)" fill="url(#paint1_linear)"/>
+<use xlink:href="#path0_fill" transform="translate(75 -206)" fill="#C4C4C4"/>
+<use xlink:href="#path0_fill" transform="translate(75 -206)" fill="url(#paint1_linear)"/>
 </g>
 </g>
 </g>
 </g>
 <defs>
-<filter id="filter0_i" filterUnits="userSpaceOnUse" x="73" y="-203" width="224" height="187" color-interpolation-filters="sRGB">
+<filter id="filter0_i" filterUnits="userSpaceOnUse" x="75" y="-206" width="220" height="192" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 255 0" result="hardAlpha"/>
@@ -25,10 +25,10 @@
 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"/>
 <feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
 </filter>
-<linearGradient id="paint1_linear" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.51221e-14 197.103 -246.963 1.20691e-14 224 -2.4647e-13)">
+<linearGradient id="paint1_linear" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.48521e-14 193.538 -242.553 1.18508e-14 220 -2.74225e-13)">
 <stop offset="0" stop-color="#6FCF97"/>
 <stop offset="1" stop-color="#56CCF2"/>
 </linearGradient>
-<path id="path0_fill" d="M 184.139 71.3201C 177.707 102.548 188.472 173.762 224 178.084L 224 124.486C 200.603 116.273 203.203 96.3902 206.669 65.2687C 210.135 34.1472 198.004 0 159.876 0C 112.217 0 55.4584 104.603 37.2611 124.486C 19.0638 144.369 5.19923 138.318 0 175.058C 13.8646 159.786 45.06 144.858 66.2901 146.53C 99.2186 149.124 104.995 166.846 121.749 185C 115.683 161.227 127.381 155.607 92.7195 124.486C 61.5143 96.4677 120.673 18.9979 159.876 22.9089C 190.205 25.9346 188.769 48.8435 184.139 71.3201Z"/>
+<path id="path0_fill" d="M 152.232 104.083C 145.915 134.746 185.106 170.619 220 174.863L 220 122.234C 197.021 114.17 199.574 94.6467 202.979 64.0881C 206.383 33.5295 194.468 0 157.021 0C 110.213 0 88.3929 76.0982 65.1064 91.8088C 41.8199 107.519 5.10638 135.816 0 171.892C 13.617 156.896 44.2553 142.238 65.1064 143.88C 97.4468 146.427 114.171 172.174 130.625 190C 124.668 166.657 130.057 144.442 108.527 104.083C 96.7411 81.9897 135.045 43.6951 152.232 43.6951C 182.167 43.6951 156.779 82.0126 152.232 104.083Z"/>
 </defs>
 </svg>

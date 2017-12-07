@@ -26,9 +26,11 @@ body {
     color: $foreground;
     border-radius: 3px;
     cursor: pointer;
+    transition: color 0.3s;
 
     &:hover,
     &:focus {
+        outline: none;        
         background-color: darken($background, 5%);
     }
 
@@ -40,5 +42,57 @@ body {
         &:focus {
             background-color: inherit;
         }
+    }
+
+    &--submitting {
+        position: relative;
+        color: $foreground;
+
+        &::after {
+            content: "";
+            position: absolute;
+            display: inline-block;
+            height: 1px;
+            left: 0;
+            bottom: 0;
+            background-color: #02AFF5;
+            animation: submitting 0.5s ease-in-out infinite alternate;
+        }
+    }
+
+    &--submit-success {
+        color: #00CE86;
+        animation: submitSuccess 0.2s ease-out;
+    }
+}
+
+@keyframes submitting {
+    0% {
+        width: 0%;
+        left: 0;
+    }
+
+    50% {
+        width: 100%;
+        left: 0;
+    }
+    
+    100% {
+        width: 0%;
+        left: 100%;
+    }
+}
+
+@keyframes submitSuccess {
+    0% {
+        transform: scale(1);
+    }
+
+    80% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

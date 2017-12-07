@@ -1,0 +1,29 @@
+<svg width="26" height="22" viewBox="0 0 26 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>aquarius_small</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(244 -176)">
+<g id="aquarius_small">
+<g id="Aquarius" filter="url(#filter0_i)">
+<use xlink:href="#path0_fill" transform="translate(-243.768 176.659)" fill="#C4C4C4"/>
+<use xlink:href="#path0_fill" transform="translate(-243.768 176.659)" fill="url(#paint1_linear)"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_i" filterUnits="userSpaceOnUse" x="-244" y="176" width="24" height="22" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 255 0" result="hardAlpha"/>
+<feOffset dx="0" dy="1"/>
+<feGaussianBlur stdDeviation="1.5"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
+</filter>
+<linearGradient id="paint1_linear" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.59861e-15 20.3724 -26.1072 1.24745e-15 23.6797 -2.88658e-14)">
+<stop offset="0" stop-color="#6FCF97"/>
+<stop offset="1" stop-color="#56CCF2"/>
+</linearGradient>
+<path id="path0_fill" d="M 16.3855 10.9561C 15.7056 14.1838 19.924 17.9599 23.6797 18.4066L 23.6797 12.8668C 21.2064 12.0179 21.4812 9.96281 21.8476 6.74612C 22.2141 3.52943 20.9316 0 16.901 0C 11.8628 0 9.51418 8.01034 7.00773 9.66408C 4.50129 11.3178 0.549626 14.2964 0 18.0939C 1.46567 16.5153 4.76343 14.9724 7.00773 15.1453C 10.4887 15.4133 12.2888 18.1236 14.0598 20C 13.4186 17.5428 13.9987 15.2044 11.6813 10.9561C 10.4127 8.63049 14.5356 4.59948 16.3855 4.59948C 19.6076 4.59948 16.8749 8.63291 16.3855 10.9561Z"/>
+</defs>
+</svg>

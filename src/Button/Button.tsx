@@ -5,14 +5,9 @@ export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> { }
 
 export class Button extends React.Component<ButtonProps, ButtonState> {
     render() {
-        const { style, className, ...props } = this.props;
-
-        const buttonsStyle: React.CSSProperties = {
-            ...style
-        };
-
+        const { className, ...props } = this.props;
         return (
-            <button style={buttonsStyle} className={'button ' + className} {...props} />
+            <button className={'button ' + className} {...props} />
         );
     }
 }
