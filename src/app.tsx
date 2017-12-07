@@ -10,6 +10,7 @@ import 'brace/theme/github';
 import 'brace/ext/language_tools';
 
 import * as React from 'react';
+import * as electron from 'electron';
 
 import AceEditor, { Annotation } from 'react-ace';
 
@@ -18,6 +19,7 @@ import { Files } from './Files';
 import { Mermaid } from './Mermaid/Mermaid';
 import { PdfExporter } from './PdfExporter';
 import { Theme } from 'mermaid';
+import { areYouSure } from './utils/areYouSure';
 
 export interface AppState {
   mermaid?: string;
@@ -37,14 +39,30 @@ export class App extends React.Component<{}, AppState> {
 
   mermaidRef: SVGElement | null = null;
 
-  async componentWillMount() {
+  handleClose = async(event: electron.Event) => {
+    if (this.fileChanged && !await areYouSure()) {
+      event.preventDefault();
+    }
+  }
+
+  componentWillMount() {
+    electron.remote.getCurrentWindow().on('close', this.handleClose);
+
     if (this.state.mermaidFilePath) {
       this.onOpen(this.state.mermaidFilePath);
     }
   }
 
+  componentWillUnmount() {
+    electron.remote.getCurrentWindow().removeListener('close', this.handleClose);
+  }
+
   get isExistingFile(): boolean {
     return !!this.state.mermaidFilePath;
+  }
+
+  get fileChanged(): boolean {
+    return this.state.mermaid !== this.state.mermaidUnchanged;
   }
 
   onMermaidError = (row: number, column: number, message: string) => {
@@ -78,6 +96,10 @@ export class App extends React.Component<{}, AppState> {
   }
 
   onOpen = async (fileName?: string | null) => {
+    if (this.fileChanged && !await areYouSure()) {
+      return;
+    }
+
     if (!fileName) {
       fileName = await Files.selectReadFile();
     }
@@ -110,7 +132,11 @@ export class App extends React.Component<{}, AppState> {
     this.setState({ mermaidUnchanged: this.state.mermaid });
   }
 
-  onNew = () => {
+  onNew = async () => {
+    if (this.fileChanged && !await areYouSure()) {
+      return;
+    }
+
     this.setState({
       mermaid: '',
       mermaidUnchanged: '',
