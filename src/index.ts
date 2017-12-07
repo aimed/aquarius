@@ -3,6 +3,9 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-insta
 
 import { enableLiveReload } from 'electron-compile';
 
+const Store = require('electron-store'); // tslint:disable-line
+const store = new Store();
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: Electron.BrowserWindow | null = null;
@@ -16,8 +19,7 @@ if (isDevMode) {
 const createWindow = async () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    ...store.get('window.bounds', { width: 800, height: 600 }),
     frame: false,
     backgroundColor: '#ffffff'
   });
@@ -30,6 +32,12 @@ const createWindow = async () => {
     await installExtension(REACT_DEVELOPER_TOOLS);
     mainWindow.webContents.openDevTools();
   }
+
+  mainWindow.on('close', () => {
+    if (mainWindow) {
+      store.set('window.bounds', mainWindow.getBounds());
+    }
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

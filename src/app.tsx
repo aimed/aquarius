@@ -22,6 +22,9 @@ import { SubmitButton } from './Button/SubmitButtons';
 import { Theme } from 'mermaid';
 import { areYouSure } from './utils/areYouSure';
 
+const Store = require('electron-store'); // tslint:disable-line
+const store = new Store();
+
 export interface AppState {
   mermaid?: string;
   mermaidUnchanged?: string;
@@ -34,8 +37,8 @@ export class App extends React.Component<{}, AppState> {
   state: AppState = {
     mermaid: '',
     mermaidUnchanged: '',
-    mermaidFilePath: window.localStorage['lastMermaidFilePath'] || null,
-    theme: window.localStorage['theme'] || 'default'
+    mermaidFilePath: store.get('lastMermaidFilePath', null),
+    theme: store.get('theme', 'default')
   };
 
   mermaidRef: SVGElement | null = null;
@@ -82,13 +85,11 @@ export class App extends React.Component<{}, AppState> {
 
   componentWillUpdate(_nextProps: {}, nextState: AppState) {
     if (nextState.mermaidFilePath !== this.state.mermaidFilePath) {
-      nextState.mermaidFilePath
-      ? window.localStorage.setItem('lastMermaidFilePath', nextState.mermaidFilePath)
-      : window.localStorage.removeItem('lastMermaidFilePath');
+      store.set('lastMermaidFilePath', nextState.mermaidFilePath);
     }
 
     if (nextState.theme !== this.state.theme) {
-      window.localStorage.setItem('theme', nextState.theme as string);
+      store.set('theme', nextState.theme as string);
     }
   }
 
