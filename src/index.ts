@@ -1,6 +1,7 @@
 import { BrowserWindow, app } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
+import { autoUpdater } from 'electron-updater';
 import { enableLiveReload } from 'electron-compile';
 
 const Store = require('electron-store'); // tslint:disable-line
@@ -14,6 +15,8 @@ const isDevMode = process.execPath.match(/[\\/]electron/);
 
 if (isDevMode) {
   enableLiveReload({strategy: 'react-hmr'});
+} else {
+  autoUpdater.checkForUpdatesAndNotify();
 }
 
 const createWindow = async () => {
