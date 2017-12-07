@@ -94,7 +94,7 @@ export class App extends React.Component<{}, AppState> {
     }
   }
 
-  getTitle(state: AppState = this.state): string {
+  getFileName(state: AppState = this.state): string {
     const hasChanged = state.mermaid !== state.mermaidUnchanged;
     const title = (state.mermaidFilePath || '') + (hasChanged ? ' (unsaved)' : '');
     return title;
@@ -176,35 +176,9 @@ export class App extends React.Component<{}, AppState> {
   }
 
   render() {
-    const containerStyle: React.CSSProperties = {
-      minHeight: '100vh',
-      minWidth: '100vw',
-      display: 'grid',
-      gridTemplateColumns: 'auto',
-      gridTemplateRows: 'auto 1fr',
-      gridTemplateAreas: `
-        "nav nav"
-        "ace mermaid"
-      `,
-    };
-
-    const navStyle: React.CSSProperties = {
-      padding: '0.5em',
-      borderBottom: '1px solid #f6f6f6',
-      gridArea: 'nav',
-      display: 'flex',
-      alignItems: 'center'
-    };
-
-    const titleStyle: React.CSSProperties = {
-      fontSize: '0.7em',
-      color: '#999999',
-      marginLeft: '1em'
-    };
-
     return (
-      <div style={containerStyle} className='aquarius'>
-        <div style={navStyle} className='aquarius__nav'>
+      <div className='aquarius'>
+        <div className='aquarius__nav'>
           <img src='./aquarius_small.svg' alt='Aquarius' height={21} />
           <Button onClick={this.onNew}>New</Button>
           <Button onClick={() => this.onOpen()}>Open</Button>
@@ -215,7 +189,7 @@ export class App extends React.Component<{}, AppState> {
               <option key={theme} value={theme}>{theme}</option>
             )}
           </select>
-          <span style={titleStyle}>{this.getTitle()}</span>
+          <span className='aquarius__filename'>{this.getFileName()}</span>
         </div>
 
         <AceEditor

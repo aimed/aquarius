@@ -6,13 +6,35 @@ body {
 }
 
 .aquarius {
+    min-height: 100vh;
+    min-width: 100vw;
+
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+      "nav nav"
+      "ace mermaid"
+    ;
+
     &__nav {
+        padding: 0.5em;
+        border-bottom: 1px solid #f6f6f6;
+        grid-area: nav;
+        display: flex;
+        align-items: center;
+        -webkit-user-select: none;
+        -webkit-app-region: drag;
+
         & > * {
             margin-right: 0.3em;
         }
+    }
 
-        -webkit-user-select: none;
-        -webkit-app-region: drag;
+    &__filename {
+        font-size: 0.7em;
+        color: #999999;
+        margin-left: 1em;
     }
 }
 
