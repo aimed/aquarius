@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "tslint --project tsconfig.json --type-check --force"
+    "lint": "tslint --project tsconfig.json --type-check --force",
+    "corp-release": "corp-semantic-release"
   },
   "keywords": [],
   "author": "max",
@@ -37,8 +38,8 @@
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
-        "name": ""
+        "owner": "aimed",
+        "name": "aquarius"
       },
       "windowsStoreConfig": {
         "packageName": "",
@@ -68,6 +69,7 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "corp-semantic-release": "^6.4.0",
     "electron-forge": "^4.1.5",
     "electron-prebuilt-compile": "1.7.9",
     "tslint": "^5.1.0",
