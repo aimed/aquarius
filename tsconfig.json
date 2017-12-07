@@ -24,5 +24,8 @@
   "formatCodeOptions": {
     "indentSize": 2,
     "tabSize": 2
-  }
+  },
+  "exclude": [
+    "out/**/*"
+  ]
 }
