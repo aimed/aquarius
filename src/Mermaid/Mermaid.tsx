@@ -41,6 +41,8 @@ export class Mermaid extends React.Component<MermaidProps, MermaidState> {
         const { children, onError = () => {/**/}, onSuccess = () => {/**/}, theme } = props;
 
         if (children === '') {
+            this.setState({ diagram: '' });
+            onSuccess();
             return;
         }
 
