@@ -13,6 +13,7 @@ import * as React from 'react';
 import * as electron from 'electron';
 
 import AceEditor, { Annotation } from 'react-ace';
+import { AppMenuManager, MenuDelegate } from './AppMenuManager';
 
 import { Button } from './Button/Button';
 import { Dialogs } from './Dialogs';
@@ -34,7 +35,7 @@ export interface AppState {
   theme?: Theme;
 }
 
-export class App extends React.Component<{}, AppState> {
+export class App extends React.Component<{}, AppState> implements MenuDelegate {
   state: AppState = {
     mermaid: '',
     mermaidUnchanged: '',
@@ -57,11 +58,14 @@ export class App extends React.Component<{}, AppState> {
     if (this.state.mermaidFilePath) {
       this.onOpen(this.state.mermaidFilePath);
     }
+
+    AppMenuManager.instance.setDelegate(this);
   }
 
   componentWillUnmount() {
     electron.remote.getCurrentWindow().removeListener('close', this.handleClose);
     // electron.remote.app.removeListener('before-quit', this.handleClose);
+    AppMenuManager.instance.setDelegate(null);
   }
 
   get isExistingFile(): boolean {
