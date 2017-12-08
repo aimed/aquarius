@@ -1,3 +1,18 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/aimed/aquarius/compare/v1.1.0...v1.2.0) (2017-12-08)
+
+
+### Bug Fixes
+
+* **submitbutton:** properly clears timeout ([095d3ad](https://github.com/aimed/aquarius/commit/095d3ad))
+
+
+### Features
+
+* adds menu items and hotkeys ([f3c943d](https://github.com/aimed/aquarius/commit/f3c943d)), closes [#6](https://github.com/aimed/aquarius/issues/6)
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/aimed/aquarius/compare/v1.0.0...v1.1.0) (2017-12-07)
 
