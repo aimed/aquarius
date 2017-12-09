@@ -1,5 +1,7 @@
 import { MenuItemConstructorOptions, remote } from 'electron';
 
+import { defaultMenuTemplate } from './AppMenuManagerDefaultTemplate';
+
 const { Menu } = remote;
 
 export interface MenuDelegate {
@@ -20,6 +22,7 @@ const EmptyDelegate: MenuDelegate = {
     onNew() {}
 };
 
+// TODO: Add basic operating system commands!
 export class AppMenuManager implements MenuDelegate {
     private static _instance: AppMenuManager | null;
 
@@ -56,7 +59,9 @@ export class AppMenuManager implements MenuDelegate {
     private constructor() {
         const template: MenuItemConstructorOptions[] = [
             {
+                id: 'file',
                 label: 'File',
+                role: 'file',
                 submenu: [
                     { role: 'new', click: this.onNew, label: 'New', accelerator: 'CmdOrCtrl+n' },
                     { role: 'open', click: this.onOpen, label: 'Open', accelerator: 'CmdOrCtrl+o' },
@@ -66,7 +71,9 @@ export class AppMenuManager implements MenuDelegate {
             }
         ];
 
-        const menu = Menu.buildFromTemplate(template);
+        const menuTemplate = defaultMenuTemplate(remote.app, remote.shell);
+        menuTemplate.splice(process.platform === 'darwin' ? 1 : 0, 0, ...template);
+        const menu = Menu.buildFromTemplate(menuTemplate);
         Menu.setApplicationMenu(menu);
     }
 }

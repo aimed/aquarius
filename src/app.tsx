@@ -13,7 +13,7 @@ import * as React from 'react';
 import * as electron from 'electron';
 
 import AceEditor, { Annotation } from 'react-ace';
-import { AppMenuManager, MenuDelegate } from './AppMenuManager';
+import { AppMenuManager, MenuDelegate } from './utils/AppMenuManager';
 
 import { Button } from './Button/Button';
 import { Dialogs } from './Dialogs';
