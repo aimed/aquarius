@@ -1,3 +1,13 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/aimed/aquarius/compare/v1.2.0...v1.2.1) (2017-12-09)
+
+
+### Bug Fixes
+
+* **menu:** adds basic menu options for all platforms ([6b3693e](https://github.com/aimed/aquarius/commit/6b3693e))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/aimed/aquarius/compare/v1.1.0...v1.2.0) (2017-12-08)
 
