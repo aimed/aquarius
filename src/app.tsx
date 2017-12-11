@@ -132,6 +132,10 @@ export class App extends React.Component<{}, AppState> implements MenuDelegate {
 
     if (!saveFilePath) {
       saveFilePath = await Dialogs.saveFile();
+
+      if (saveFilePath) {
+        this.setState({ mermaidFilePath: saveFilePath });
+      }
     }
 
     if (saveFilePath) {
