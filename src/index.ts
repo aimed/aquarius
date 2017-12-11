@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 import { BrowserWindow, app } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
@@ -24,7 +26,8 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     ...store.get('window.bounds', { width: 800, height: 600 }),
     frame: false,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    icon: path.resolve(__dirname, '..', 'Icon.icns')
   });
 
   // and load the index.html of the app.
