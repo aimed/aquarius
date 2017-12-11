@@ -110,7 +110,7 @@ export class App extends React.Component<{}, AppState> implements MenuDelegate {
     }
 
     if (!fileName) {
-      fileName = await Dialogs.openFile();
+      fileName = await Dialogs.openFile({ filters: [{ extensions: ['mmd'], name: '' }] });
     }
 
     if (!fileName) {
@@ -131,10 +131,15 @@ export class App extends React.Component<{}, AppState> implements MenuDelegate {
     let saveFilePath: string | null | undefined = mermaidFilePath;
 
     if (!saveFilePath) {
-      saveFilePath = await Dialogs.saveFile();
+      saveFilePath = await Dialogs.saveFile({ filters: [{ extensions: ['mmd'], name: '' }] });
     }
 
     if (saveFilePath) {
+
+      if (!saveFilePath.endsWith('.mmd')) {
+        saveFilePath = saveFilePath + '.mmd';
+      }
+
       await fs.writeFile(saveFilePath, mermaid + '');
       this.setState({ mermaidUnchanged: this.state.mermaid, mermaidFilePath: saveFilePath });
     }
@@ -184,7 +189,7 @@ export class App extends React.Component<{}, AppState> implements MenuDelegate {
         <div className='aquarius__nav'>
           <img src='./aquarius_small.svg' alt='Aquarius' height={21} />
           <Button onClick={this.onNew}>New</Button>
-          <Button onClick={() => this.onOpen()}>Open</Button>
+          <SubmitButton onClick={() => this.onOpen()}>Open</SubmitButton>
           <SubmitButton onClick={() => this.onSave()}>Save</SubmitButton>
           <SubmitButton onClick={() => this.onExport()} disabled={!this.isExistingFile || !this.mermaidRef}>Export</SubmitButton>
           <select onChange={e => this.setTheme(e.currentTarget.value as Theme)} value={this.state.theme}>
