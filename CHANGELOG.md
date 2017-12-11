@@ -1,3 +1,13 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/aimed/aquarius/compare/v1.3.0...v1.4.0) (2017-12-11)
+
+
+### Features
+
+* adds icon ([93d496d](https://github.com/aimed/aquarius/commit/93d496d)), closes [#15](https://github.com/aimed/aquarius/issues/15)
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/aimed/aquarius/compare/v1.2.2...v1.3.0) (2017-12-11)
 
