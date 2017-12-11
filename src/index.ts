@@ -16,7 +16,7 @@ const isDevMode = process.execPath.match(/[\\/]electron/);
 if (isDevMode) {
   enableLiveReload({strategy: 'react-hmr'});
 } else {
-  autoUpdater.checkForUpdatesAndNotify();
+  /* */
 }
 
 const createWindow = async () => {
@@ -49,6 +49,8 @@ const createWindow = async () => {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  await autoUpdater.checkForUpdatesAndNotify();
 };
 
 // This method will be called when Electron has finished
