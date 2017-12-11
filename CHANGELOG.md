@@ -1,3 +1,18 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/aimed/aquarius/compare/v1.2.2...v1.3.0) (2017-12-11)
+
+
+### Bug Fixes
+
+* show file changed if not saved ([47c9b5a](https://github.com/aimed/aquarius/commit/47c9b5a))
+
+
+### Features
+
+* adds suggested extensions to open/save diaglogs ([8418445](https://github.com/aimed/aquarius/commit/8418445))
+
+
+
 <a name="1.2.2"></a>
 ## [1.2.2](https://github.com/aimed/aquarius/compare/v1.2.1...v1.2.2) (2017-12-11)
 
