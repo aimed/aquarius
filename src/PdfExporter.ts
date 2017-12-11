@@ -1,5 +1,6 @@
 import * as electron from 'electron';
 import * as fs from 'fs';
+import * as path from 'path';
 
 const htmlTemplate = (svg: SVGElement) => `
 <html>
@@ -25,7 +26,8 @@ const htmlTemplate = (svg: SVGElement) => `
 
 export class PdfExporter {
     static pdfNameForFile(fileName: string): string {
-        return fileName.endsWith('.pdf') ? fileName : fileName + '.pdf';
+        const filePath = path.parse(fileName);
+        return (filePath.ext ? fileName.replace(filePath.ext, '') : fileName) + '.pdf';
     }
 
     static getActualSvgSize(svg: SVGElement): ClientRect {
