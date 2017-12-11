@@ -132,17 +132,12 @@ export class App extends React.Component<{}, AppState> implements MenuDelegate {
 
     if (!saveFilePath) {
       saveFilePath = await Dialogs.saveFile();
-
-      if (saveFilePath) {
-        this.setState({ mermaidFilePath: saveFilePath });
-      }
     }
 
     if (saveFilePath) {
       await fs.writeFile(saveFilePath, mermaid + '');
+      this.setState({ mermaidUnchanged: this.state.mermaid, mermaidFilePath: saveFilePath });
     }
-
-    this.setState({ mermaidUnchanged: this.state.mermaid });
   }
 
   onNew = async () => {
