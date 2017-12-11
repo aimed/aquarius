@@ -1,3 +1,15 @@
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/aimed/aquarius/compare/v1.2.1...v1.2.2) (2017-12-11)
+
+
+### Bug Fixes
+
+* exporter now replaces extension with '.pdf' ([9222e70](https://github.com/aimed/aquarius/commit/9222e70))
+* saves filepath when saving new file ([3a4de91](https://github.com/aimed/aquarius/commit/3a4de91)), closes [#14](https://github.com/aimed/aquarius/issues/14)
+* tries to fix auto updater ([a858654](https://github.com/aimed/aquarius/commit/a858654))
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/aimed/aquarius/compare/v1.2.0...v1.2.1) (2017-12-09)
 
